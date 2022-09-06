@@ -1,3 +1,7 @@
+修改版:
+1. 20220906: 在种子详情页面，“一键下载” 添加到qBittorrent下载器时，解析种子详情页面中的IMDb id，作为种子的qBit标签，以便在种子下载完成时调用外部脚本时输出
+
+---
 <p align="center">
 <img src="https://github.com/ronggang/PT-Plugin-Plus/raw/master/public/assets/icon-128.png"><br/>
 <a href="https://github.com/ronggang/PT-Plugin-Plus/releases/latest" title="GitHub Releases"><img src="https://img.shields.io/github/release/ronggang/PT-Plugin-Plus.svg?label=Latest%20Release"></a>

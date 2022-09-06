@@ -90,6 +90,21 @@
       }
       return title;
     }
+
+
+    /**
+     * 获取当前页内的 IMDb
+     */
+     getIMDb() {
+      let bodytext = $("body").text();
+      let datas = /IMDb(链接)\s*(\<.[!>]*\>)?.*https:\/\/www\.imdb\.com\/title\/(tt\d+)/.exec(bodytext);
+      if (datas && datas.length > 1) {
+        return datas[3];
+      }
+      return '';
+    }
+
+
   }
   new App().init();
 })(jQuery, window);

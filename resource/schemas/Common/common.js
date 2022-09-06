@@ -286,7 +286,8 @@
           title: option.title,
           savePath: savePath,
           autoStart: this.defaultClientOptions.autoStart,
-          link: option.link
+          link: option.link,
+          imdbTag: option.imdbTag
         })
           .then(result => {
             console.log("命令执行完成", result);

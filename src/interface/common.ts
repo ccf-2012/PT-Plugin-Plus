@@ -301,6 +301,7 @@ export interface DownloadOptions {
   clientId?: string;
   // 来源链接地址
   link?: string;
+  imdbTag?: string;
 }
 
 /**

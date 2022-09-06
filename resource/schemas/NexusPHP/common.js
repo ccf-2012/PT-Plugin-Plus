@@ -287,7 +287,8 @@
           title: option.title,
           savePath: savePath,
           autoStart: this.defaultClientOptions.autoStart,
-          link: option.link
+          link: option.link,
+          imdbTag: option.imdbTag
         })
           .then(result => {
             console.log("命令执行完成", result);
@@ -542,6 +543,13 @@
               return;
             }
 
+            // CCF: torcp
+            let imdbtag = ""
+            if (this.getIMDb) {
+              imdbtag = this.getIMDb();
+              console.log("imdb tag = "+imdbtag);
+            }
+            
             let url = this.getDownloadURL();
 
             if (!url) {
@@ -561,7 +569,8 @@
             this.sendTorrentToDefaultClient({
               url,
               title,
-              link: this.currentURL
+              link: this.currentURL,
+              imdbTag: imdbtag
             })
               .then(() => {
                 success();

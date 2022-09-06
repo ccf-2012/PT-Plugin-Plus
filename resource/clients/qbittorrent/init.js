@@ -169,6 +169,11 @@
         formData.append("paused", !data.autoStart);
       }
 
+      // CCF torcp: add IMDb tag
+      if (data.imdbTag) {
+        formData.append("tags", data.imdbTag);
+      }
+
       let url = data.url;
 
       // 磁性连接
