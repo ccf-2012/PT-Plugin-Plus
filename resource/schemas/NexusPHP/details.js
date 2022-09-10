@@ -97,9 +97,9 @@
      */
      getIMDb() {
       let bodytext = $("body").text();
-      let datas = /IMDb(链接)\s*(\<.[!>]*\>)?.*https:\/\/www\.imdb\.com\/title\/(tt\d+)/.exec(bodytext);
+      let datas = /(href=\")https:\/\/www\.imdb\.com\/title\/(tt\d+)/.exec(bodytext);
       if (datas && datas.length > 1) {
-        return datas[3];
+        return datas[2];
       }
       return '';
     }
