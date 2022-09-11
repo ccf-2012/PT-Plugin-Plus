@@ -96,8 +96,8 @@
      * 获取当前页内的 IMDb
      */
      getIMDb() {
-      let bodytext = $("body").text();
-      debugger;
+      let bodytext = $("body").html();
+      // debugger;
       let datas = /https?:\/\/www\.imdb\.com\/title\/(tt\d+)/.exec(bodytext);
       if (datas && datas.length > 1) {
         return datas[1];
