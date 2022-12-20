@@ -15,6 +15,48 @@
     "scripts": ["/schemas/Common/common.js", "/schemas/Common/torrents.js"]
   }],
   "host": "speedapp.io",
+  "levelRequirements": [
+    {
+      "level": "1",
+      "name": "Power User",
+      "interval": "13",
+      "uploaded": "200GB",
+      "ratio": "2",
+      "privilege": "Can make requests"
+    },
+    {
+      "level": "2",
+      "name": "Elite User",
+      "interval": "26",
+      "uploaded": "1TB",
+      "ratio": "3",
+      "privilege": "Can be chosen as Hyperseeders"
+    },
+    {
+      "level": "3",
+      "name": "Xtreme User",
+      "interval": "52",
+      "uploaded": "5TB",
+      "ratio": "4",
+      "privilege": "None"
+    },
+    {
+      "level": "4",
+      "name": "Super User",
+      "interval": "103",
+      "uploaded": "20TB",
+      "ratio": "5",
+      "privilege": "None"
+    },
+    {
+      "level": "5",
+      "name": "Legend User",
+      "interval": "309",
+      "uploaded": "100TB",
+      "ratio": "6",
+      "privilege": "None"
+    }
+  ],
   "searchEntryConfig": {
     "page": "/browse?search=$key$",
     "loggedRegex": "href=\"\/profile\"",
@@ -45,7 +87,7 @@
 	  },
 	  "time":  {
 		"selector": [""],
-        "filters": ["query.attr('title')","dateTime(query).valueOf()?dateTime(query):query"]
+      "filters": [ "query.attr('title')", "dateTime(query).isValid() ? dateTime(query).valueOf() : dateTime(query.replace('下午','PM ').replace('上午','AM ').replace('日','').replaceAll(/年|月/g,'-'), 'YYYY-M-D A hh:mm:ss').format('YYYY-M-D HH:mm')" ]
 	  },
 	  "seeders":  {
 		"selector": ["span:contains('seeders')"],
@@ -117,12 +159,11 @@
         }, 
         "levelName": {
           "selector": ["div.card-body.pt-4 >div.align-items-center div.text-muted"],
-          "filters":  ["query.text().replace(/,|\\s|\\n/g,'')"]
+          "filters":  ["$(query.contents()[0]).text().trim()"]
         },
-        
-         "joinTime": {
+        "joinTime": {
           "selector": ["dt:contains('注册日期') + dd, dt:contains('Signup date') + dd, dt:contains('Data inregistrarii') + dd"],
-          "filters": ["dateTime(query.text()).valueOf()"]
+          "filters": [ "query.text()", "dateTime(query).isValid() ? dateTime(query).valueOf() : dateTime(query.replace('下午','PM ').replace('上午','AM ').replace('日','').replaceAll(/年|月/g,'-'), 'YYYY-M-D A hh:mm:ss').valueOf()" ]
         },
         "seedingSize": {
 	        "selector": ["dt:contains('奖励积分') + dd > b:nth-of-type(2)","dt:contains('Bonus points') + dd > b:nth-of-type(2)","dt:contains('Puncte bonus') + dd > b:nth-of-type(2)"],
@@ -165,6 +206,20 @@
         "confirmSize": {
           "selector": ["div.container > div.row >div.col-12.gutter-b div.row.mr-0.ml-0.py-3 > div.col-6.col-sm-4.col-md-1.text-center.text-muted:contains('B')"],
           "filters": ["query"]
+        }
+      }
+    },
+    "bonusExtendInfo": {
+      "prerequisites": "!user.bonusPerHour",
+      "page": "/profile",
+      "fields": {
+        "bonusPerHour": {
+          "selector": [
+            "dt:contains('奖励积分') + dd > b:eq(0)",
+            "dt:contains('Bonus points') + dd > b:eq(0)",
+            "dt:contains('Puncte bonus') + dd > b:eq(0)"
+          ],
+          "filters": ["parseFloat(query.text())"]
         }
       }
     }

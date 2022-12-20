@@ -380,6 +380,13 @@ class Config {
             _site.patterns = systemSite.patterns;
           }
 
+          // 更新升级要求
+          if (!systemSite.levelRequirements && _site.levelRequirements) {
+            delete _site.levelRequirements;
+          } else {
+            _site.levelRequirements = systemSite.levelRequirements;
+          }
+
           // 合并系统定义的搜索入口
           if (_site.searchEntry && systemSite.searchEntry) {
             systemSite.searchEntry.forEach((sysEntry: SearchEntry) => {
@@ -404,6 +411,11 @@ class Config {
             });
           } else if (systemSite.searchEntry) {
             _site.searchEntry = systemSite.searchEntry;
+          }
+
+          // 设置默认图标
+          if (!systemSite.icon && !_site.icon) {
+            _site.icon = _site.url + "/favicon.ico"
           }
 
           this.options.sites[index] = _site;
@@ -488,9 +500,14 @@ class Config {
             console.log("upgradeSites.site", site, newHost);
             site.host = newHost;
             site.url = systemSite.url;
-            site.icon = systemSite.icon;
+            
+            // 设置默认图标
+            if (!systemSite.icon && !site.icon)
+              site.icon = site.url + "/favicon.ico"
+            else
+              site.icon = systemSite.icon;
           }
-
+          
           // 更新搜索方案
           if (this.options.searchSolutions) {
             this.options.searchSolutions.forEach(

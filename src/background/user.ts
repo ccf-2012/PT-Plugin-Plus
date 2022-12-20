@@ -130,7 +130,7 @@ export class User {
 
           if (!userInfo.isLogged) {
             userInfo.lastUpdateStatus = EUserDataRequestStatus.needLogin;
-            this.updateStatus(site, userInfo);
+            //this.updateStatus(site, userInfo);
 
             rejectFN(
               APP.createErrorMessage({
@@ -152,7 +152,9 @@ export class User {
           if (userInfo.name || userInfo.id) {
             let url = `${this.getSiteURL(site)}${rule.page
               .replace("$user.id$", userInfo.id)
-              .replace("$user.name$", userInfo.name)}`;
+              .replace("$user.name$", userInfo.name)
+              .replace("$user.bonusPage$", userInfo.bonusPage)
+              .replace("$user.unsatisfiedsPage$", userInfo.unsatisfiedsPage)}`;
             // 上次请求未完成时，直接返回最近的数据
             if (this.checkQueue(host, url)) {
               resolve(userInfo);
@@ -171,12 +173,12 @@ export class User {
               })
               .catch((error: any) => {
                 userInfo.lastUpdateStatus = EUserDataRequestStatus.unknown;
-                this.updateStatus(site, userInfo);
+                //this.updateStatus(site, userInfo);
                 rejectFN(APP.createErrorMessage(error));
               });
           } else {
             userInfo.lastUpdateStatus = EUserDataRequestStatus.unknown;
-            this.updateStatus(site, userInfo);
+            //this.updateStatus(site, userInfo);
             rejectFN(
               APP.createErrorMessage({
                 status: EUserDataRequestStatus.unknown,
@@ -187,7 +189,8 @@ export class User {
         })
         .catch((error: any) => {
           userInfo.lastUpdateStatus = EUserDataRequestStatus.unknown;
-          this.updateStatus(site, userInfo);
+          console.log("getInfos Error :",error);
+          //this.updateStatus(site, userInfo);
           rejectFN(APP.createErrorMessage(error));
         });
     });
@@ -201,7 +204,7 @@ export class User {
   public getMoreInfos(site: Site, userInfo: UserInfo): Promise<any> {
     return new Promise<any>((resolve?: any, reject?: any) => {
       let requests: any[] = [];
-      let selectors = ["userSeedingTorrents"];
+      let selectors = ["userSeedingTorrents", "bonusExtendInfo", "hnrExtendInfo"];
 
       selectors.forEach((name: string) => {
         let host = site.host as string;
@@ -210,7 +213,9 @@ export class User {
         if (rule) {
           let url = `${this.getSiteURL(site)}${rule.page
             .replace("$user.id$", userInfo.id)
-            .replace("$user.name$", userInfo.name)}`;
+            .replace("$user.name$", userInfo.name)
+            .replace("$user.bonusPage$", userInfo.bonusPage)
+            .replace("$user.unsatisfiedsPage$", userInfo.unsatisfiedsPage)}`;
           // 上次请求未完成时，跳过
           if (this.checkQueue(host, url)) {
             return;
